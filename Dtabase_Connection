@@ -1,0 +1,117 @@
+STEP2 Database Connection
+
+mekedii mulinma web.xml ekata
+
+<context-param>
+        <param-name>driver-class</param-name>
+        <param-value>com.mysql.cj.jdbc.Driver</param-value>
+ </context-param>
+
+ me wage context parameters athule parameters and theier respecive values hatiyata Driver,dbUrl,dbUserName,dbPassword denna ona
+
+ Ita passe awashya controller/servelet ekata gihin iwara wela eke init() method ekak hadagena eka athuledi me context
+ parameter values tika ganna ona
+
+ There are 2 ways
+
+ 1.getServletContext() --> meka use kranne okkoma servelet wlata enee ekama databae context parameters nm
+
+ 2.getServletConfig() --> meka use kranne If these parameters are specific to this servlet, use getServletConfig()
+
+
+ var driverClass = getServletContext().getInitParameter("driver-class");
+ //in here  getInitPrametr athulata api web.xml eke dena parameter name eka denna ona
+
+
+
+me widihata api variables wlwtw gattama apita puluwn  connection eka establish kara ganna
+
+ Class.forName(driverClass);
+ //mulinma meka danna ona normally api java wladi nm ape version eka java(6) wlat wadi nm hari dependency ue krnwnm hari api meka danne na mkda ema nokaranawanm
+ api aniwarenma driver file ekaka dalane proj ekata danne but in this case we are applying it because in Servelet Enviromnets there are not just a 1 loader there are may
+ ethakota meka load karaddi problems enna puluwn ekai api mekath danne
+
+
+ connection=DriverManager.getConnection(dbURL,USERNAME,PASSWORD);
+ //driver mangerta kiyala connection ekak hadagannawa parameters widihata udin ganna web.xml eke decare krpu context parametrs send krnwa
+
+
+
+ ============================================================================================================================================================
+ ============================================================================================================================================================
+ ============================================================================================================================================================
+ ========================================================         THE CODE SNIPPET (Student)          ===========================================================
+
+   public void init() {
+
+         Connection connection;
+
+         //If the database connection parameters are the same for all servlets in your application, use getServletContext().
+         //Api ganne meka
+         var driverClass = getServletContext().getInitParameter("driver-class");
+         var dbURL = getServletContext().getInitParameter("dbURL");
+         var Password = getServletContext().getInitParameter("dbPassword");
+         var username = getServletContext().getInitParameter("dbUserName");
+         System.out.println("getServeletContext" + driverClass + dbURL + Password + username);
+
+
+        //If these parameters are specific to this servlet, use getServletConfig()
+        //meka use karanne na
+           /*  var driverClass = getServletConfig().getInitParameter("driver-class");
+             var dbURL = getServletConfig().getInitParameter("dbURL");
+             var userName = getServletConfig().getInitParameter("dbUserName");
+             var password = getServletConfig().getInitParameter("dbPassword");
+         System.out.println("getServeletConfig()"+driverClass+dbURL+ Password+username);*/
+
+         try {
+             System.out.println("Attempting to load the database driver...");
+             Class.forName(driverClass);
+             System.out.println("Database driver loaded successfully.");
+
+             System.out.println("Attempting to establish a database connection...");
+             connection = DriverManager.getConnection(dbURL, username, Password);
+             System.out.println("Database connection established successfully.");
+
+             // Verify the connection is not null
+             if (connection != null) {
+                 System.out.println("Connection object is not null, indicating a successful connection.");
+             }
+
+
+         } catch (SQLException e) {
+
+                 System.out.println("An error occurred while establishing the database connection.");
+                 e.printStackTrace(); // This will print the full stack trace to the console.
+                 throw new RuntimeException("Connection error", e);
+         } catch (ClassNotFoundException e) {
+             throw new RuntimeException(e);
+         }
+     }
+
+
+============================================================================================================================================================
+ ============================================================================================================================================================
+ ============================================================================================================================================================
+ ========================================================         THE CODE SNIPPET(Web.xml)                ===========================================================
+
+<context-param>
+        <param-name>driver-class</param-name>
+        <param-value>com.mysql.cj.jdbc.Driver</param-value>
+    </context-param>
+
+    <context-param>
+        <param-name>dbURL</param-name>
+        <param-value>jdbc:mysql://localhost:3306/student?createDatabaseIfNotExist=true</param-value>
+    </context-param>
+
+    <context-param>
+        <param-name>dbUserName</param-name>
+        <param-value>root</param-value>
+    </context-param>
+
+    <context-param>
+        <param-name>dbPassword</param-name>
+        <param-value>Ijse@1234</param-value>
+    </context-param>
+
+

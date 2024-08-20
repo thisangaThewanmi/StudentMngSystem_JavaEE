@@ -1,0 +1,37 @@
+Mulinma layers tika hada ganna
+
+Bo,Dao,Controller,Entity,DTO
+
+Bo interface eka meke tama method tika gahnne
+BoImpl mekedi Bo eka implement kara gena eka methods tika overide kran implementation ethana
+
+Dao interface eka meke tama method tika gahnne
+DaoImpl mekedi Bo eka implement kara gena eka methods tika overide kran implementation ethana
+
+Bo and Dao differences
+Bo wldi we ara makin method name in a way which is easier to understand like(saveStudentDetails)
+Dao wldi api just simple widihata (save ,delete) ema hadanne
+
+
+Extra Dao and Bo interfaces enna puluwn like crudDAO ,sUPERbO ETC
+
+
+Controller eken    ===========>    dto ekak hadala bo eke adala method ekata yawano
+    studentBo.addStudent(studentDto,connection)
+
+
+Bo eken    ==========>  Dao instance ekak hadagena eka athule tiyea method ekata yawanawa dn dao wlidi api acess karanne entity nisa  obj eka entity ekakata convert krla yawanne
+           return  studentDao.save(new Student(studentDto.getId(), studentDto.getName(), studentDto.getCity(), studentDto.getEmail(), studentDto.getLevel()),connection);
+
+
+Dao eken     ==========> Dao eken karanne db eke save karanoo
+            public boolean save(Student student, Connection connection) throws SQLException {
+                   PreparedStatement ps = connection.prepareStatement(SAVE_STUDENT);
+                   ps.setString(1, student.getId());
+                   ps.setString(2, student.getName());
+                   ps.setString(3, student.getCity());
+                   ps.setString(4, student.getEmail());
+                   ps.setString(5, student.getLevel());
+
+                   return ps.executeUpdate() > 0;
+               }

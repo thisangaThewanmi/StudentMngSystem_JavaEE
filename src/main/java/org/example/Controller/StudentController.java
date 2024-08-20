@@ -1,11 +1,16 @@
 package org.example.Controller;
 
 
+import jakarta.json.bind.Jsonb;
+import jakarta.json.bind.JsonbBuilder;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.example.Bo.StudentBo;
+import org.example.Bo.StudentBoImpl;
+import org.example.dto.StudentDto;
 
 import java.io.IOException;
 import java.sql.Connection;
@@ -15,10 +20,11 @@ import java.sql.SQLException;
 @WebServlet(urlPatterns = "/student",loadOnStartup = 2)
 public class StudentController extends HttpServlet {
 
+    Connection connection;
     @Override
     public void init() {
 
-        Connection connection;
+
 
         //If the database connection parameters are the same for all servlets in your application, use getServletContext().
 
@@ -72,7 +78,36 @@ public class StudentController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
+        try (var writer = resp.getWriter()) {  //try with resources eken writer eka gannawa
 
+
+
+            if (req.getContentType().equals("application/json")) { //Context-type eka jsonnda kiyla balanwa
+
+                Jsonb jsonb = JsonbBuilder.create(); //jsonBuilder ekak create krla
+                StudentDto studentDto = jsonb.fromJson(req.getReader(), StudentDto.class); //ena data tika Dto ekak widihata convert krnawa
+
+
+
+                StudentBo studentBo = new StudentBoImpl(); //studentBo ekak hadagena eka athule tiyena save method ekata dto and connection yawanawa
+
+                try {
+                    if (studentBo.addStudent(studentDto,connection)) { //true wunoth(Bo eke method eken return wenne boolean ekak)
+                        writer.write("Student saved sucessfully");//writerta kiyano meka write keranna kila
+                        resp.setStatus(HttpServletResponse.SC_CREATED);
+                    }else {
+                        writer.write("Something went wrong");
+                        resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+                    }
+
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                    throw new RuntimeException(e);
+
+                }
+
+            }
+        }
     }
 
     @Override

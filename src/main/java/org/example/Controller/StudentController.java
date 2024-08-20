@@ -1,4 +1,4 @@
-package org.example;
+package org.example.Controller;
 
 
 import jakarta.servlet.ServletException;
@@ -13,7 +13,7 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 @WebServlet(urlPatterns = "/student",loadOnStartup = 2)
-public class Student extends HttpServlet {
+public class StudentController extends HttpServlet {
 
     @Override
     public void init() {

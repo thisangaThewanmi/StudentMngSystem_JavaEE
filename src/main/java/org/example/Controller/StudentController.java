@@ -124,11 +124,11 @@ public class StudentController extends HttpServlet {
             StudentBo studentBo = new StudentBoImpl();
 
             try {
-                if(studentBo.updateStudent(studentId,studentDto,connection)) {
+                if (studentBo.updateStudent(studentId, studentDto, connection)) {
                     writer.write("Student updated sucessfully");
                     System.out.println("Student updated sucessfully");// methanadi api SC_NO_CONTENT meka dana nisa staus ekata writer eka denne na mkda no content nisa
                     resp.setStatus(HttpServletResponse.SC_NO_CONTENT);
-                }else{
+                } else {
                     writer.write("Something went wrong");
                     resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
                 }
@@ -141,7 +141,34 @@ public class StudentController extends HttpServlet {
         }
 
 
+    }
 
+    @Override
+    protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+
+
+
+        try (var writer = resp.getWriter()) {
+            var studentId = req.getParameter("id");
+            StudentBo studentBo = new StudentBoImpl();
+
+            try {
+                System.out.println("id: " + studentId);
+                if(studentBo.deleteStudent(studentId, connection)) {
+                    writer.write("Student deleted sucessfully");
+                    resp.setStatus(HttpServletResponse.SC_NO_CONTENT);
+                }else{
+                    writer.write("Something went wrong");
+                    resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+                throw new RuntimeException(e);
+            }
         }
     }
+
+
+    }
+
 

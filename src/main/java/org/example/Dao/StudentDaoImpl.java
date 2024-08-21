@@ -49,24 +49,13 @@ public class StudentDaoImpl implements StudentDao {
     }
 
     @Override
-    public boolean delete(int id, Connection connection) {
-        return false;
+    public boolean delete(String id, Connection connection) throws SQLException {
+
+        PreparedStatement ps = connection.prepareStatement(DELETE_STUDENT);
+        ps.setString(1, id);
+
+        return ps.executeUpdate() > 0;
     }
-    /* @Override*/
-   /* public boolean addStudent(Student student) {
-        PreparedStatement ps = null;
-        try {
-            ps = connection.prepareStatement(SAVE_STUDENT);
 
-            ps.setString(1, studentDto.getName());
-            ps.setString(2, studentDto.getCity());
-            ps.setString(3, studentDto.getEmail());
-            ps.setString(4, studentDto.getLevel());
-
-            return ps.executeUpdate() > 0;
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-    }*/
     }
 

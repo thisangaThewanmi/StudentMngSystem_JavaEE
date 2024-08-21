@@ -25,8 +25,9 @@ public class StudentBoImpl  implements StudentBo {
     }
 
     @Override
-    public boolean deleteStudent(String id,Connection connection) {
-        return false;
+    public boolean deleteStudent(String id,Connection connection) throws SQLException {
+
+        return studentDao.delete(id,connection);
     }
 
     @Override

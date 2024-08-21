@@ -11,7 +11,7 @@ public interface StudentBo {
 
     boolean addStudent(StudentDto studentDto, Connection connection) throws SQLException;
     boolean updateStudent( String StudentId,StudentDto studentDto,Connection connection) throws SQLException;
-    boolean deleteStudent(String id,Connection connection);
+    boolean deleteStudent(String id,Connection connection) throws SQLException;
     ArrayList<StudentDto> getAllStudents(Connection connection);
     StudentDto getStudentById(int id,Connection connection);
 }

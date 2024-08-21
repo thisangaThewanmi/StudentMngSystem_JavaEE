@@ -9,6 +9,6 @@ public interface StudentDao {
 
     boolean save(Student student, Connection connection) throws SQLException;
     Student getAll(int id,Connection connection);
-    boolean update(Student student,Connection connection);
+    boolean update(String StudentId,Student student,Connection connection) throws SQLException;
     boolean delete(int id,Connection connection);
 }

@@ -10,7 +10,7 @@ import java.util.ArrayList;
 public interface StudentBo {
 
     boolean addStudent(StudentDto studentDto, Connection connection) throws SQLException;
-    boolean updateStudent(StudentDto studentDto,Connection connection);
+    boolean updateStudent( String StudentId,StudentDto studentDto,Connection connection) throws SQLException;
     boolean deleteStudent(String id,Connection connection);
     ArrayList<StudentDto> getAllStudents(Connection connection);
     StudentDto getStudentById(int id,Connection connection);

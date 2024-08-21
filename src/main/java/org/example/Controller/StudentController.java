@@ -112,6 +112,36 @@ public class StudentController extends HttpServlet {
 
     @Override
     protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        super.doPut(req, resp);
+        if (req.getContentType() == null || !req.getContentType().toLowerCase().startsWith("application/json")) {
+            resp.sendError(HttpServletResponse.SC_BAD_REQUEST); //send error
+            return;
+        }
+
+        try (var writer = resp.getWriter()) {
+            var studentId = req.getParameter("id"); //parameter eken ena data ek id eata ganno
+            StudentDto studentDto = JsonbBuilder.create().fromJson(req.getReader(), StudentDto.class);
+
+            StudentBo studentBo = new StudentBoImpl();
+
+            try {
+                if(studentBo.updateStudent(studentId,studentDto,connection)) {
+                    writer.write("Student updated sucessfully");
+                    System.out.println("Student updated sucessfully");// methanadi api SC_NO_CONTENT meka dana nisa staus ekata writer eka denne na mkda no content nisa
+                    resp.setStatus(HttpServletResponse.SC_NO_CONTENT);
+                }else{
+                    writer.write("Something went wrong");
+                    resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+                throw new RuntimeException(e);
+            }
+
+
+        }
+
+
+
+        }
     }
-}
+

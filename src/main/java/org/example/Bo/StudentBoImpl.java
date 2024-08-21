@@ -20,8 +20,8 @@ public class StudentBoImpl  implements StudentBo {
     }
 
     @Override
-    public boolean updateStudent(StudentDto studentDto,Connection connection) {
-        return false;
+    public boolean updateStudent(String StudentId,StudentDto studentDto,Connection connection) throws SQLException {
+        return studentDao.update(StudentId,new Student(studentDto.getId(),studentDto.getName(),studentDto.getCity(),studentDto.getEmail(),studentDto.getLevel()),connection);
     }
 
     @Override
